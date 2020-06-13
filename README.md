@@ -1,4 +1,16 @@
-# CEU5RAPI
+# CEU-5R-API
+
+Dependencies:
+bcryptjs
+colors
+cookie-parser
+dotenv
+express
+express-fileupload
+mongoose
+morgan
+nodemon
+slugify
 
 How to install
 1. Git clone
