@@ -32,12 +32,56 @@ exports.createReport = asyncHandler(async (req, res, next) => {
   // Add user to req.body
   // req.body.user = req.user.id;
 
-  const report = await Report.create(req.body);
+  // If the user has a uploaded photo.
+  if (req.files) {
+    const photo = req.files.photo;
 
-  res.status(201).json({
-    success: true,
-    data: report,
-  });
+    // Create custom filename
+    photo.name = `photo_${Date.now()}${path.parse(photo.name).ext}`;
+
+    // Make sure the image is a photo
+    if (!photo.mimetype.startsWith('image')) {
+      return next(new ErrorResponse(`Please upload an image file`, 400));
+    }
+
+    // Check filesize
+    if (photo.size > process.env.MAX_FILE_UPLOAD) {
+      return next(
+        new ErrorResponse(
+          `Please upload an image less than ${process.env.MAX_FILE_UPLOAD}`,
+          400
+        )
+      );
+    }
+
+    photo.mv(
+      `${process.env.FILE_UPLOAD_PATH_REPORT}/${photo.name}`,
+      async (err) => {
+        if (err) {
+          console.log(err);
+          return next(new ErrorResponse(`Problem with file upload`, 500));
+        }
+      }
+    );
+
+    const photoName = { photo: photo.name };
+    const addedPhotoName = { ...req.body, ...photoName };
+    const report = await Report.create(addedPhotoName);
+
+    res.status(200).json({
+      success: true,
+      data: report,
+    });
+  }
+
+  if (!req.files) {
+    const report = await Report.create(req.body);
+
+    res.status(200).json({
+      success: true,
+      data: report,
+    });
+  }
 });
 
 // @desc    Update new reports

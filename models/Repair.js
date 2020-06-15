@@ -17,5 +17,9 @@ const RepairSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  photo: {
+    type: String,
+    default: 'no-photo.jpg',
+  },
 });
 module.exports = mongoose.model('Repair', RepairSchema);

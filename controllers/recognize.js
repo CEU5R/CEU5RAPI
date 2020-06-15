@@ -35,12 +35,56 @@ exports.createRecognize = asyncHandler(async (req, res, next) => {
   // Add user to req.body
   // req.body.user = req.user.id;
 
-  const recognize = await Recognize.create(req.body);
+  // If the user has a uploaded photo.
+  if (req.files) {
+    const photo = req.files.photo;
 
-  res.status(201).json({
-    success: true,
-    data: recognize,
-  });
+    // Create custom filename
+    photo.name = `photo_${Date.now()}${path.parse(photo.name).ext}`;
+
+    // Make sure the image is a photo
+    if (!photo.mimetype.startsWith('image')) {
+      return next(new ErrorResponse(`Please upload an image file`, 400));
+    }
+
+    // Check filesize
+    if (photo.size > process.env.MAX_FILE_UPLOAD) {
+      return next(
+        new ErrorResponse(
+          `Please upload an image less than ${process.env.MAX_FILE_UPLOAD}`,
+          400
+        )
+      );
+    }
+
+    photo.mv(
+      `${process.env.FILE_UPLOAD_PATH_RECOGNIZE}/${photo.name}`,
+      async (err) => {
+        if (err) {
+          console.log(err);
+          return next(new ErrorResponse(`Problem with file upload`, 500));
+        }
+      }
+    );
+
+    const photoName = { photo: photo.name };
+    const addedPhotoName = { ...req.body, ...photoName };
+    const recognize = await Recognize.create(addedPhotoName);
+
+    res.status(200).json({
+      success: true,
+      data: recognize,
+    });
+  }
+
+  if (!req.files) {
+    const recognize = await Recognize.create(req.body);
+
+    res.status(200).json({
+      success: true,
+      data: recognize,
+    });
+  }
 });
 
 // @desc    Update new recommend
