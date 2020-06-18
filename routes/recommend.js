@@ -29,6 +29,6 @@ router
   .route('/:id')
   .get(getRecommend)
   .put(updateRecommend)
-  .delete(deleteRecommend);
+  .put(deleteRecommend);
 
 module.exports = router;

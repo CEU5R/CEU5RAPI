@@ -25,6 +25,6 @@ router
   .get(advancedResults(Repair, 'repairs'), getRepairs)
   .post(createRepair);
 
-router.route('/:id').get(getRepair).put(updateRepair).delete(deleteRepair);
+router.route('/:id').get(getRepair).put(updateRepair).put(deleteRepair);
 
 module.exports = router;

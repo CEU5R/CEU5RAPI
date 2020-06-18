@@ -25,6 +25,6 @@ router
   .get(advancedResults(Report, 'reports'), getReports)
   .post(createReport);
 
-router.route('/:id').get(getReport).put(updateReport).delete(deleteReport);
+router.route('/:id').get(getReport).put(updateReport).put(deleteReport);
 
 module.exports = router;

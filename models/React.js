@@ -17,5 +17,9 @@ const ReactSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  status: {
+    type: Number,
+    default: 1,
+  },
 });
 module.exports = mongoose.model('Reacts', ReactSchema);

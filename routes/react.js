@@ -25,6 +25,6 @@ router
   .get(advancedResults(React, 'React'), getReacts)
   .post(createReact);
 
-router.route('/:id').get(getReact).put(updateReact).delete(deleteReact);
+router.route('/:id').get(getReact).put(updateReact).put(deleteReact);
 
 module.exports = router;

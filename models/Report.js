@@ -21,5 +21,9 @@ const ReportSchema = new mongoose.Schema({
     type: String,
     default: 'no-photo.jpg',
   },
+  status: {
+    type: Number,
+    default: 1,
+  },
 });
 module.exports = mongoose.model('Report', ReportSchema);

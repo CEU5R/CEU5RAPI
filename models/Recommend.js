@@ -21,5 +21,9 @@ const RecommendSchema = new mongoose.Schema({
     type: String,
     default: 'no-photo.jpg',
   },
+  status: {
+    type: Number,
+    default: 1,
+  },
 });
 module.exports = mongoose.model('Recommend', RecommendSchema);

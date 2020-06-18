@@ -145,13 +145,12 @@ exports.deleteRecommend = asyncHandler(async (req, res, next) => {
   //   );
   // }
 
-  recommend.remove();
-  res.status(200).json({
-    success: true,
-    data: {
-      message: 'Data removed',
-    },
+  recommend = await Recommend.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
   });
+
+  res.status(200).json({ success: true, data: recommend });
 });
 
 exports.reportPhotoUpload = asyncHandler(async (req, res, next) => {

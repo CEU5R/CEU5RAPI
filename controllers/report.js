@@ -136,9 +136,12 @@ exports.deleteReport = asyncHandler(async (req, res, next) => {
   //   );
   // }
 
-  report.remove();
+  report = await Report.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
 
-  res.status(200).json({ success: true, data: {} });
+  res.status(200).json({ success: true, data: report });
 });
 
 exports.reportPhotoUpload = asyncHandler(async (req, res, next) => {

@@ -20,6 +20,7 @@ const repairs = require('./routes/repair');
 const recommends = require('./routes/recommend');
 const recognize = require('./routes/recognize');
 const react = require('./routes/react');
+const auth = require('./routes/auth');
 
 const app = express();
 
@@ -46,6 +47,10 @@ app.use('/api/v1/repair', repairs);
 app.use('/api/v1/recommend', recommends);
 app.use('/api/v1/recognize', recognize);
 app.use('/api/v1/react', react);
+app.use('/api/v1/auth', auth);
+
+// router for healthCheck
+app.use('/healthcheck', require('./routes/healthCheck'));
 
 app.use(errorHandler);
 

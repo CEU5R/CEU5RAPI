@@ -29,6 +29,6 @@ router
   .route('/:id')
   .get(getRecognize)
   .put(updateRecognize)
-  .delete(deleteRecognize);
+  .put(deleteRecognize);
 
 module.exports = router;

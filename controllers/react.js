@@ -2,6 +2,7 @@ const path = require('path');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const React = require('../models/React');
+const messages = require('../library/message-resources');
 
 // @desc    Get all react
 // @route   GET /api/v1/react
@@ -18,7 +19,7 @@ exports.getReact = asyncHandler(async (req, res, next) => {
 
   if (!react) {
     return next(
-      new ErrorResponse(`React not found with an id of ${req.params.id}`, 404)
+      new ErrorResponse(messages.P0001.msg.replace(`{id}`, req.params.id), 404)
     );
   }
 
@@ -92,13 +93,12 @@ exports.deleteReact = asyncHandler(async (req, res, next) => {
   //   );
   // }
 
-  react.remove();
-  res.status(200).json({
-    success: true,
-    data: {
-      message: 'Data removed',
-    },
+  react = await React.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
   });
+
+  res.status(200).json({ success: true, data: react });
 });
 
 exports.reportPhotoUpload = asyncHandler(async (req, res, next) => {

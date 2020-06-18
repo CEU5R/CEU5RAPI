@@ -144,14 +144,12 @@ exports.deleteRecognize = asyncHandler(async (req, res, next) => {
   //     )
   //   );
   // }
-
-  recognize.remove();
-  res.status(200).json({
-    success: true,
-    data: {
-      message: 'Data removed',
-    },
+  recognize = await Recognize.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
   });
+
+  res.status(200).json({ success: true, data: recognize });
 });
 
 exports.reportPhotoUpload = asyncHandler(async (req, res, next) => {

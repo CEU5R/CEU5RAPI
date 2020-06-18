@@ -136,8 +136,12 @@ exports.deleteRepair = asyncHandler(async (req, res, next) => {
   //   );
   // }
 
-  repair.remove();
-  res.status(200).json({ success: true, data: {} });
+  repair = await Repair.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({ success: true, data: repair });
 });
 
 exports.reportPhotoUpload = asyncHandler(async (req, res, next) => {
