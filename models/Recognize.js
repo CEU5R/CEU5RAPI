@@ -23,10 +23,6 @@ const RecognizeSchema = new mongoose.Schema({
   },
   status: {
     type: Number,
-    default: 1,
-  },
-  status: {
-    type: Number,
     enum: [1, 0],
     default: 1,
   },

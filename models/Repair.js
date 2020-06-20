@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const constants = require('../library/constants');
 
 const RepairSchema = new mongoose.Schema({
   subject: {
@@ -19,7 +20,7 @@ const RepairSchema = new mongoose.Schema({
   },
   status: {
     type: Number,
-    enum: [1, 0],
+    enum: [0, 1, 2, 3],
     default: 1,
   },
   photo: {
