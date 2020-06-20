@@ -25,5 +25,10 @@ const RecognizeSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
+  status: {
+    type: Number,
+    enum: [1, 0],
+    default: 1,
+  },
 });
 module.exports = mongoose.model('Recognize', RecognizeSchema);

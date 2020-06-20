@@ -19,6 +19,7 @@ const RepairSchema = new mongoose.Schema({
   },
   status: {
     type: Number,
+    enum: [1, 0],
     default: 1,
   },
   photo: {
