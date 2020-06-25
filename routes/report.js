@@ -5,7 +5,6 @@ const {
   createReport,
   deleteReport,
   updateReport,
-  reportPhotoUpload,
 } = require('../controllers/report');
 
 const Report = require('../models/Report');
@@ -13,18 +12,20 @@ const advancedResults = require('../middleware/advancedResults');
 
 const router = express.Router();
 
-// const { protect, authorize } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 
 // Re-route into other resource routers
 // router.use('/:reportId/courses', courseRouter);
 
-router.route('/:id/photo').put(reportPhotoUpload);
-
 router
   .route('/')
-  .get(advancedResults(Report, 'reports'), getReports)
-  .post(createReport);
+  .get(protect, advancedResults(Report, 'reports'), getReports)
+  .post(protect, createReport);
 
-router.route('/:id').get(getReport).put(updateReport).put(deleteReport);
+router
+  .route('/:id')
+  .get(protect, getReport)
+  .put(protect, updateReport)
+  .put(protect, deleteReport);
 
 module.exports = router;

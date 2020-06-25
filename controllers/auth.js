@@ -17,6 +17,9 @@ exports.register = asyncHandler(async (req, res, next) => {
     role,
   });
 
+  // Create token
+  const token = user.getSignedJwtToken();
+
   sendTokenResponse(user, 200, res);
 });
 
@@ -27,7 +30,7 @@ exports.register = asyncHandler(async (req, res, next) => {
 exports.login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
-  // Validate email & password
+  // Validate emil & password
   if (!email || !password) {
     return next(new ErrorResponse('Please provide an email and password', 400));
   }
