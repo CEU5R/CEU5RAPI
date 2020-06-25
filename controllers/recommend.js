@@ -106,7 +106,7 @@ exports.updateRecommend = asyncHandler(async (req, res, next) => {
   if (recommend.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `User ${req.params.id} is not authorized to update this recommend`,
+        `User ${req.params.id} is not authorized to update this recommend ${recommend._id}`,
         401
       )
     );
@@ -139,7 +139,7 @@ exports.deleteRecommend = asyncHandler(async (req, res, next) => {
   if (recommend.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `User ${req.params.id} is not authorized to delete this recommend`,
+        `User ${req.params.id} is not authorized to delete this recommend ${recommend._id}`,
         401
       )
     );

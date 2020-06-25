@@ -106,7 +106,7 @@ exports.updateRecognize = asyncHandler(async (req, res, next) => {
   if (recognize.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `User ${req.params.id} is not authorized to update this recognize`,
+        `User ${req.user.id} is not authorized to update this recognize ${recognize._id}`,
         401
       )
     );
@@ -139,7 +139,7 @@ exports.deleteRecognize = asyncHandler(async (req, res, next) => {
   if (recognize.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `User ${req.params.id} is not authorized to delete this recognize`,
+        `User ${req.user.id} is not authorized to delete this recognize`,
         401
       )
     );

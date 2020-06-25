@@ -97,10 +97,10 @@ exports.updateRepair = asyncHandler(async (req, res, next) => {
   }
 
   // Make sure user is report owner
-  if (report.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (repair.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `User ${req.params.id} is not authorized to update this report`,
+        `User ${req.params.id} is not authorized to update this repair ${repair._id}`,
         401
       )
     );
@@ -130,7 +130,7 @@ exports.deleteRepair = asyncHandler(async (req, res, next) => {
   if (repair.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `User ${req.params.id} is not authorized to delete this repair`,
+        `User ${req.params.id} is not authorized to delete this repair ${repair._id}`,
         401
       )
     );

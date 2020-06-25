@@ -100,7 +100,7 @@ exports.updateReport = asyncHandler(async (req, res, next) => {
   if (report.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `User ${req.params.id} is not authorized to update this report`,
+        `User ${req.params.id} is not authorized to update this report ${report._id}`,
         401
       )
     );
@@ -130,7 +130,7 @@ exports.deleteReport = asyncHandler(async (req, res, next) => {
   if (report.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `User ${req.params.id} is not authorized to delete this report`,
+        `User ${req.params.id} is not authorized to delete this report ${report._id}`,
         401
       )
     );
