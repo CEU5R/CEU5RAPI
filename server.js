@@ -25,6 +25,7 @@ const recommends = require('./routes/recommend');
 const recognize = require('./routes/recognize');
 const react = require('./routes/react');
 const auth = require('./routes/auth');
+const users = require('./routes/users');
 
 const app = express();
 
@@ -64,6 +65,7 @@ app.use('/api/v1/recommend', recommends);
 app.use('/api/v1/recognize', recognize);
 app.use('/api/v1/react', react);
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/users', users);
 
 // router for healthCheck
 app.use('/healthcheck', require('./routes/healthCheck'));
