@@ -19,13 +19,13 @@ const { protect, authorize } = require('../middleware/auth');
 
 router
   .route('/')
-  .get(protect, advancedResults(Recommends, 'recommends'), getRecommends)
-  .post(protect, createRecommend);
+  .get(advancedResults(Recommends, 'recommends'), getRecommends)
+  .post(protect, authorize('student', 'admin'), createRecommend);
 
 router
   .route('/:id')
-  .get(protect, getRecommend)
-  .put(protect, updateRecommend)
-  .put(protect, deleteRecommend);
+  .get(protect, authorize('admin'), getRecommend)
+  .put(protect, authorize('student', 'admin'), updateRecommend)
+  .put(protect, authorize('admin'), deleteRecommend);
 
 module.exports = router;

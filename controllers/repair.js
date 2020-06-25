@@ -30,7 +30,7 @@ exports.getRepair = asyncHandler(async (req, res, next) => {
 // @access  Private
 exports.createRepair = asyncHandler(async (req, res, next) => {
   // Add user to req.body
-  // req.body.user = req.user.id;
+  req.body.user = req.user.id;
 
   // If the user has a uploaded photo.
   if (req.files) {
@@ -97,14 +97,14 @@ exports.updateRepair = asyncHandler(async (req, res, next) => {
   }
 
   // Make sure user is report owner
-  // if (report.user.toString() !== req.user.id && req.user.role !== 'admin') {
-  //   return next(
-  //     new ErrorResponse(
-  //       `User ${req.params.id} is not authorized to update this report`,
-  //       401
-  //     )
-  //   );
-  // }
+  if (report.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.params.id} is not authorized to update this report`,
+        401
+      )
+    );
+  }
 
   repair = await Repair.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -126,15 +126,15 @@ exports.deleteRepair = asyncHandler(async (req, res, next) => {
     );
   }
 
-  // Make sure user is report owner
-  // if (report.user.toString() !== req.user.id && req.user.role !== 'admin') {
-  //   return next(
-  //     new ErrorResponse(
-  //       `User ${req.params.id} is not authorized to delete this report`,
-  //       401
-  //     )
-  //   );
-  // }
+  // Make sure user is repair owner
+  if (repair.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.params.id} is not authorized to delete this repair`,
+        401
+      )
+    );
+  }
 
   repair = await Repair.findByIdAndUpdate(req.params.id, req.body, {
     new: true,

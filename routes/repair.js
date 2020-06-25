@@ -20,12 +20,12 @@ const { protect, authorize } = require('../middleware/auth');
 router
   .route('/')
   .get(advancedResults(Repair, 'repairs'), getRepairs)
-  .post(protect, createRepair);
+  .post(protect, authorize('student', 'admin'), createRepair);
 
 router
   .route('/:id')
-  .get(protect, getRepair)
-  .put(protect, updateRepair)
-  .put(protect, deleteRepair);
+  .get(protect, authorize('admin'), getRepair)
+  .put(protect, authorize('student', 'admin'), updateRepair)
+  .put(protect, authorize('admin'), deleteRepair);
 
 module.exports = router;

@@ -19,13 +19,13 @@ const { protect, authorize } = require('../middleware/auth');
 
 router
   .route('/')
-  .get(protect, advancedResults(Recognize, 'Recognize'), getMultipleRecognize)
-  .post(protect, createRecognize);
+  .get(advancedResults(Recognize, 'Recognize'), getMultipleRecognize)
+  .post(protect, authorize('student', 'admin'), createRecognize);
 
 router
   .route('/:id')
-  .get(protect, getRecognize)
-  .put(protect, updateRecognize)
-  .put(protect, deleteRecognize);
+  .get(protect, authorize('admin'), getRecognize)
+  .put(protect, authorize('student', 'admin'), updateRecognize)
+  .put(protect, authorize('admin'), deleteRecognize);
 
 module.exports = router;

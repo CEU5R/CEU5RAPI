@@ -19,13 +19,13 @@ const { protect, authorize } = require('../middleware/auth');
 
 router
   .route('/')
-  .get(protect, advancedResults(React, 'React'), getReacts)
-  .post(protect, createReact);
+  .get(advancedResults(React, 'React'), getReacts)
+  .post(protect, authorize('student', 'admin'), createReact);
 
 router
   .route('/:id')
-  .get(protect, getReact)
-  .put(protect, updateReact)
-  .put(protect, deleteReact);
+  .get(protect, authorize('admin'), getReact)
+  .put(protect, authorize('student', 'admin'), updateReact)
+  .put(protect, authorize('admin'), deleteReact);
 
 module.exports = router;

@@ -26,5 +26,10 @@ const RecommendSchema = new mongoose.Schema({
     enum: [1, 0],
     default: 1,
   },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true,
+  },
 });
 module.exports = mongoose.model('Recommend', RecommendSchema);
