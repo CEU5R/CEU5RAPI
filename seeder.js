@@ -13,6 +13,8 @@ const Recommend = require('./models/Recommend');
 const Repair = require('./models/Repair');
 const React = require('./models/React');
 const User = require('./models/User');
+const Department = require('./models/Department');
+const Building = require('./models/Building');
 
 // Connect to DB
 mongoose.connect(process.env.MONGO_URI, {
@@ -57,6 +59,8 @@ const deleteData = async () => {
     await React.deleteMany();
     await Repair.deleteMany();
     await User.deleteMany();
+    await Department.deleteMany();
+    await Building.deleteMany();
 
     console.log('Data Destroyed...'.red.inverse);
     process.exit();
