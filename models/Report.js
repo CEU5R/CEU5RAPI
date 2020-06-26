@@ -13,9 +13,17 @@ const ReportSchema = new mongoose.Schema({
     required: [true, 'Please add a description'],
     maxlength: [500, 'Description cannot be more than 500 characters'],
   },
+  solution: {
+    type: String,
+    maxlength: [1000, 'Solution cannot be more than 1000 characters'],
+  },
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+  category: {
+    type: String,
+    default: 'Report',
   },
   photo: {
     type: String,

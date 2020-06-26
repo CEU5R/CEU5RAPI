@@ -26,6 +26,9 @@ const recognize = require('./routes/recognize');
 const react = require('./routes/react');
 const auth = require('./routes/auth');
 const users = require('./routes/users');
+const history = require('./routes/history');
+const department = require('./routes/department');
+const building = require('./routes/building');
 
 const app = express();
 
@@ -66,6 +69,9 @@ app.use('/api/v1/recognize', recognize);
 app.use('/api/v1/react', react);
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', users);
+app.use('/api/v1/history', history);
+app.use('/api/v1/department', department);
+app.use('/api/v1/building', building);
 
 // router for healthCheck
 app.use('/healthcheck', require('./routes/healthCheck'));

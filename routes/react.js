@@ -14,18 +14,15 @@ const router = express.Router();
 
 const { protect, authorize } = require('../middleware/auth');
 
-// Re-route into other resource routers
-// router.use('/:reportId/courses', courseRouter);
-
 router
   .route('/')
   .get(protect, authorize('admin'), advancedResults(React, 'React'), getReacts)
-  .post(protect, authorize('student', 'admin'), createReact);
+  .post(protect, authorize('student', 'admin'), createReact)
 
 router
   .route('/:id')
   .get(protect, authorize('admin'), getReact)
   .put(protect, authorize('student', 'admin'), updateReact)
-  .put(protect, authorize('admin'), deleteReact);
+  .put(protect, authorize('admin'), deleteReact)
 
 module.exports = router;

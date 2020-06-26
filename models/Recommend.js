@@ -21,6 +21,10 @@ const RecommendSchema = new mongoose.Schema({
     type: String,
     default: 'no-photo.jpg',
   },
+  type: {
+    type: String,
+    default: 'Recommend',
+  },
   status: {
     type: Number,
     enum: [1, 0],

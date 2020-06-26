@@ -26,6 +26,10 @@ const RecognizeSchema = new mongoose.Schema({
     enum: [1, 0],
     default: 1,
   },
+  category: {
+    type: String,
+    default: 'Recognize',
+  },
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',

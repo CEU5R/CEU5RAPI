@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
 
 const ReactSchema = new mongoose.Schema({
-  subject: {
-    type: String,
-    required: [true, 'Please add a Subject'],
-    trim: true,
-    maxlength: [50, 'Subject cannot be more than 50 characters'],
+  department: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Department',
+    required: true,
   },
   slug: String,
   description: {
@@ -22,9 +21,18 @@ const ReactSchema = new mongoose.Schema({
     enum: [1, 0],
     default: 1,
   },
+  category: {
+    type: String,
+    default: 'React',
+  },
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
+    required: true,
+  },
+  rating: {
+    type: Number,
+    enum: [1, 2, 3, 4, 5],
     required: true,
   },
 });

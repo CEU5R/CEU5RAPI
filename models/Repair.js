@@ -14,6 +14,10 @@ const RepairSchema = new mongoose.Schema({
     required: [true, 'Please add a description'],
     maxlength: [500, 'Description cannot be more than 500 characters'],
   },
+  solution: {
+    type: String,
+    maxlength: [1000, 'Solution cannot be more than 1000 characters'],
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -23,9 +27,18 @@ const RepairSchema = new mongoose.Schema({
     enum: [0, 1, 2, 3],
     default: 1,
   },
+  category: {
+    type: String,
+    default: 'Repair',
+  },
   photo: {
     type: String,
     default: 'no-photo.jpg',
+  },
+  building: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Building',
+    required: true,
   },
   user: {
     type: mongoose.Schema.ObjectId,
