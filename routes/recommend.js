@@ -7,7 +7,7 @@ const {
   updateRecommend,
 } = require('../controllers/recommend');
 
-const Recommends = require('../models/Recommend');
+const Recommend = require('../models/Recommend');
 const advancedResults = require('../middleware/advancedResults');
 
 const router = express.Router();
@@ -19,7 +19,7 @@ const { protect, authorize } = require('../middleware/auth');
 
 router
   .route('/')
-  .get(protect, authorize('admin'), advancedResults(Recommends, 'recommends'), getRecommends)
+  .get(protect, authorize('admin'), advancedResults(Recommend, '_id'), getRecommends)
   .post(protect, authorize('student', 'admin'), createRecommend);
 
 router
