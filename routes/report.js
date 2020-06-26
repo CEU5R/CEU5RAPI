@@ -19,7 +19,7 @@ const { protect, authorize } = require('../middleware/auth');
 
 router
   .route('/')
-  .get(advancedResults(Report, 'reports'), getReports)
+  .get(protect, authorize('admin'), advancedResults(Report, 'reports'), getReports)
   .post(protect, authorize('student', 'admin'), createReport);
 
 router

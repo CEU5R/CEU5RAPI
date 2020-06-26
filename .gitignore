@@ -1,3 +1,4 @@
 node_modules
 config/config.env
+seeder.js
 CEU5R API.postman_collection.json

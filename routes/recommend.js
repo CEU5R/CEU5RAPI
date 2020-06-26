@@ -19,7 +19,7 @@ const { protect, authorize } = require('../middleware/auth');
 
 router
   .route('/')
-  .get(advancedResults(Recommends, 'recommends'), getRecommends)
+  .get(protect, authorize('admin'), advancedResults(Recommends, 'recommends'), getRecommends)
   .post(protect, authorize('student', 'admin'), createRecommend);
 
 router
