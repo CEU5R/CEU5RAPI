@@ -33,7 +33,7 @@ const RepairSchema = new mongoose.Schema({
   },
   photo: {
     type: String,
-    default: 'no-photo.jpg',
+    default: 'https://ceu5rimages.s3.us-east-1.amazonaws.com/no-photo.jpg',
   },
   building: {
     type: mongoose.Schema.ObjectId,
