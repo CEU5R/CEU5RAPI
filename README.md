@@ -1,5 +1,7 @@
 # CEU-5R-API
 
+![screenshot]https://prnt.sc/t7s6jc
+
 ## Dependencies
 
 * [bcryptjs](https://www.npmjs.com/package/bcryptjs) - Password ecryption package used
