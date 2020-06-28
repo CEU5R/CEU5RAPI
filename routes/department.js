@@ -1,23 +1,23 @@
-const express = require('express');
+const express = require("express");
 const {
-    createDepartment,
-    getDepartments,
-    updateDepartment,
-    deleteDepartment,
-} = require('../controllers/department');
+  createDepartment,
+  getDepartments,
+  updateDepartment,
+  deleteDepartment,
+} = require("../controllers/department");
 
 const router = express.Router();
 
-const { protect, authorize } = require('../middleware/auth');
+const { protect, authorize } = require("../middleware/auth");
 
 router
-    .route('/')
-    .post(protect, authorize('admin'), createDepartment)
-    .get(protect, authorize('admin'), getDepartments)
+  .route("/")
+  .post(protect, authorize("admin"), createDepartment)
+  .get(protect, getDepartments);
 
 router
-    .route('/:id')
-    .put(protect, authorize('admin'), updateDepartment)
-    .put(protect, authorize('admin'), deleteDepartment)
+  .route("/:id")
+  .put(protect, authorize("admin"), updateDepartment)
+  .put(protect, authorize("admin"), deleteDepartment);
 
 module.exports = router;
