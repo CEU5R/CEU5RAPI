@@ -1,13 +1,85 @@
-const ErrorResponse = require('../utils/errorResponse');
-const asyncHandler = require('../middleware/async');
-const React = require('../models/React');
-const messages = require('../library/message-resources');
+const ErrorResponse = require("../utils/errorResponse");
+const asyncHandler = require("../middleware/async");
+const React = require("../models/React");
+const messages = require("../library/message-resources");
 
 // @desc    Get all react
 // @route   GET /api/v1/react
 // @access  Public
 exports.getReacts = asyncHandler(async (req, res, next) => {
-  res.status(200).json(res.advancedResults);
+  let query;
+
+  // Copy req.query
+  const reqQuery = { ...req.query };
+
+  // Fields to exclude
+  const removeFields = ["select", "sort", "page", "limit"];
+
+  // Loop over removeFields and delete them from reqQuery
+  removeFields.forEach((param) => delete reqQuery[param]);
+
+  console.log(reqQuery);
+
+  // Create query string
+  let queryStr = JSON.stringify(reqQuery);
+
+  // Create operators
+  queryStr = queryStr.replace(
+    /\b(gt|gte|lt|lte|in)\b/g,
+    (match) => `$${match}`
+  );
+
+  // Finding resource
+  query = React.find(JSON.parse(queryStr))
+    .populate("user")
+    .populate("department");
+
+  // Select Fields
+  if (req.query.select) {
+    const fields = req.query.select.split(",").join(" ");
+    query = query.select(fields);
+  }
+
+  // Sort
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(",").join(" ");
+    query = query.sort(sortBy);
+  } else {
+    query = query.sort("-createdAt");
+  }
+
+  // Pagination
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 10;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const total = await React.countDocuments();
+
+  query = query.skip(startIndex).limit(limit);
+
+  // Executing query
+  const reacts = await query;
+
+  // Pagination result
+  const pagination = {};
+
+  if (endIndex < total) {
+    pagination.next = {
+      page: page + 1,
+      limit,
+    };
+  }
+
+  if (startIndex > 0) {
+    pagination.prev = {
+      page: page - 1,
+      limit,
+    };
+  }
+
+  res
+    .status(200)
+    .json({ success: true, count: reacts.length, pagination, data: reacts });
 });
 
 // @desc    Get single react
@@ -53,7 +125,7 @@ exports.updateReact = asyncHandler(async (req, res, next) => {
   }
 
   // Make sure user is react owner
-  if (react.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (react.user.toString() !== req.user.id && req.user.role !== "admin") {
     return next(
       new ErrorResponse(
         `User ${req.user.id} is not authorized to update this react ${react._id}`,
@@ -83,7 +155,7 @@ exports.deleteReact = asyncHandler(async (req, res, next) => {
   }
 
   // Make sure user is react owner
-  if (react.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (react.user.toString() !== req.user.id && req.user.role !== "admin") {
     return next(
       new ErrorResponse(
         `User ${req.user.id} is not authorized to delete this react`,

@@ -1,13 +1,86 @@
-const path = require('path');
-const ErrorResponse = require('../utils/errorResponse');
-const asyncHandler = require('../middleware/async');
-const Repair = require('../models/Repair');
+const path = require("path");
+const ErrorResponse = require("../utils/errorResponse");
+const asyncHandler = require("../middleware/async");
+const Repair = require("../models/Repair");
+const { count } = require("console");
 
 // @desc    Get all repairs
 // @route   GET /api/v1/repair
 // @access  Public
 exports.getRepairs = asyncHandler(async (req, res, next) => {
-  res.status(200).json(res.advancedResults);
+  let query;
+
+  // Copy req.query
+  const reqQuery = { ...req.query };
+
+  // Fields to exclude
+  const removeFields = ["select", "sort", "page", "limit"];
+
+  // Loop over removeFields and delete them from reqQuery
+  removeFields.forEach((param) => delete reqQuery[param]);
+
+  console.log(reqQuery);
+
+  // Create query string
+  let queryStr = JSON.stringify(reqQuery);
+
+  // Create operators
+  queryStr = queryStr.replace(
+    /\b(gt|gte|lt|lte|in)\b/g,
+    (match) => `$${match}`
+  );
+
+  // Finding resource
+  query = Repair.find(JSON.parse(queryStr))
+    .populate("user")
+    .populate("building");
+
+  // Select Fields
+  if (req.query.select) {
+    const fields = req.query.select.split(",").join(" ");
+    query = query.select(fields);
+  }
+
+  // Sort
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(",").join(" ");
+    query = query.sort(sortBy);
+  } else {
+    query = query.sort("-createdAt");
+  }
+
+  // Pagination
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 10;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const total = await Repair.countDocuments();
+
+  query = query.skip(startIndex).limit(limit);
+
+  // Executing query
+  const repairs = await query;
+
+  // Pagination result
+  const pagination = {};
+
+  if (endIndex < total) {
+    pagination.next = {
+      page: page + 1,
+      limit,
+    };
+  }
+
+  if (startIndex > 0) {
+    pagination.prev = {
+      page: page - 1,
+      limit,
+    };
+  }
+
+  res
+    .status(200)
+    .json({ success: true, count: repairs.length, pagination, data: repairs });
 });
 
 // @desc    Get single repair
@@ -40,7 +113,7 @@ exports.createRepair = asyncHandler(async (req, res, next) => {
     photo.name = `photo_${Date.now()}${path.parse(photo.name).ext}`;
 
     // Make sure the image is a photo
-    if (!photo.mimetype.startsWith('image')) {
+    if (!photo.mimetype.startsWith("image")) {
       return next(new ErrorResponse(`Please upload an image file`, 400));
     }
 
@@ -97,7 +170,7 @@ exports.updateRepair = asyncHandler(async (req, res, next) => {
   }
 
   // Make sure user is report owner
-  if (repair.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (repair.user.toString() !== req.user.id && req.user.role !== "admin") {
     return next(
       new ErrorResponse(
         `User ${req.params.id} is not authorized to update this repair ${repair._id}`,
@@ -127,7 +200,7 @@ exports.deleteRepair = asyncHandler(async (req, res, next) => {
   }
 
   // Make sure user is repair owner
-  if (repair.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (repair.user.toString() !== req.user.id && req.user.role !== "admin") {
     return next(
       new ErrorResponse(
         `User ${req.params.id} is not authorized to delete this repair ${repair._id}`,
@@ -154,7 +227,7 @@ exports.reportPhotoUpload = asyncHandler(async (req, res, next) => {
   }
 
   // Make sure user is report owner
-  if (report.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (report.user.toString() !== req.user.id && req.user.role !== "admin") {
     return next(
       new ErrorResponse(
         `User ${req.params.id} is not authorized to update this report`,
@@ -170,7 +243,7 @@ exports.reportPhotoUpload = asyncHandler(async (req, res, next) => {
   const file = req.files.file;
 
   // Make sure the image is a photo
-  if (!file.mimetype.startsWith('image')) {
+  if (!file.mimetype.startsWith("image")) {
     return next(new ErrorResponse(`Please upload an image file`, 400));
   }
 
