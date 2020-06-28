@@ -1,16 +1,16 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const ReactSchema = new mongoose.Schema({
   department: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Department',
+    ref: "Department",
     required: true,
   },
   slug: String,
   description: {
     type: String,
-    required: [true, 'Please add a description'],
-    maxlength: [500, 'Description cannot be more than 500 characters'],
+    required: [true, "Please add a description"],
+    maxlength: [500, "Description cannot be more than 500 characters"],
   },
   createdAt: {
     type: Date,
@@ -23,17 +23,17 @@ const ReactSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    default: 'React',
+    default: "React",
   },
   user: {
     type: mongoose.Schema.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
   },
   rating: {
-    type: Number,
-    enum: [1, 2, 3, 4, 5],
+    type: String,
+    enum: ["1", "2", "3", "4", "5"],
     required: true,
   },
 });
-module.exports = mongoose.model('Reacts', ReactSchema);
+module.exports = mongoose.model("Reacts", ReactSchema);
