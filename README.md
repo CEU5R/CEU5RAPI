@@ -1,6 +1,6 @@
 # CEU-5R-API
 
-![screenshot]https://prnt.sc/t7s6jc
+![screenshot](https://prnt.sc/t7s6jc)
 
 ## Dependencies
 
