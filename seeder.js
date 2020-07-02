@@ -1,20 +1,20 @@
-const fs = require('fs');
-const mongoose = require('mongoose');
-const colors = require('colors');
-const dotenv = require('dotenv');
+const fs = require("fs");
+const mongoose = require("mongoose");
+const colors = require("colors");
+const dotenv = require("dotenv");
 
 // Load env vars
-dotenv.config({ path: './config/config.env' });
+dotenv.config({ path: "./config/config.env" });
 
 // Load models
-const Report = require('./models/Report');
-const Recognize = require('./models/Recognize');
-const Recommend = require('./models/Recommend');
-const Repair = require('./models/Repair');
-const React = require('./models/React');
-const User = require('./models/User');
-const Department = require('./models/Department');
-const Building = require('./models/Building');
+const Report = require("./models/Report");
+const Recognize = require("./models/Recognize");
+const Recommend = require("./models/Recommend");
+const Repair = require("./models/Repair");
+const React = require("./models/React");
+const User = require("./models/User");
+const Department = require("./models/Department");
+const Building = require("./models/Building");
 
 // Connect to DB
 mongoose.connect(process.env.MONGO_URI, {
@@ -58,19 +58,16 @@ const deleteData = async () => {
     await Recommend.deleteMany();
     await React.deleteMany();
     await Repair.deleteMany();
-    await User.deleteMany();
-    await Department.deleteMany();
-    await Building.deleteMany();
 
-    console.log('Data Destroyed...'.red.inverse);
+    console.log("Data Destroyed...".red.inverse);
     process.exit();
   } catch (err) {
     console.log(err);
   }
 };
 
-if (process.argv[2] === '-i') {
+if (process.argv[2] === "-i") {
   importData();
-} else if (process.argv[2] === '-d') {
+} else if (process.argv[2] === "-d") {
   deleteData();
 }

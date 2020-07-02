@@ -1,7 +1,7 @@
-const path = require('path');
-const ErrorResponse = require('../utils/errorResponse');
-const asyncHandler = require('../middleware/async');
-const Report = require('../models/Report');
+const path = require("path");
+const ErrorResponse = require("../utils/errorResponse");
+const asyncHandler = require("../middleware/async");
+const Report = require("../models/Report");
 
 // @desc    Get all reports
 // @route   GET /api/v1/reports
@@ -32,56 +32,24 @@ exports.createReport = asyncHandler(async (req, res, next) => {
   // Add user to req.body
   req.body.user = req.user.id;
 
-  // If the user has a uploaded photo.
-  if (req.files) {
-    const photo = req.files.photo;
+  const file = req.file;
 
-    // Create custom filename
-    photo.name = `photo_${Date.now()}${path.parse(photo.name).ext}`;
+  if (file) {
+    // Add url to req.body
+    const photoUrl = req.file.location;
 
-    // Make sure the image is a photo
-    if (!photo.mimetype.startsWith('image')) {
-      return next(new ErrorResponse(`Please upload an image file`, 400));
-    }
-
-    // Check filesize
-    if (photo.size > process.env.MAX_FILE_UPLOAD) {
-      return next(
-        new ErrorResponse(
-          `Please upload an image less than ${process.env.MAX_FILE_UPLOAD}`,
-          400
-        )
-      );
-    }
-
-    photo.mv(
-      `${process.env.FILE_UPLOAD_PATH_REPORT}/${photo.name}`,
-      async (err) => {
-        if (err) {
-          console.log(err);
-          return next(new ErrorResponse(`Problem with file upload`, 500));
-        }
-      }
-    );
-
-    const photoName = { photo: photo.name };
+    const photoName = { photo: photoUrl };
     const addedPhotoName = { ...req.body, ...photoName };
     const report = await Report.create(addedPhotoName);
-
-    res.status(200).json({
-      success: true,
-      data: report,
-    });
   }
 
-  if (!req.files) {
+  if (!file) {
     const report = await Report.create(req.body);
-
-    res.status(200).json({
-      success: true,
-      data: report,
-    });
   }
+
+  res.status(200).json({
+    success: true,
+  });
 });
 
 // @desc    Update new reports
@@ -97,7 +65,7 @@ exports.updateReport = asyncHandler(async (req, res, next) => {
   }
 
   // Make sure user is report owner
-  if (report.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (report.user.toString() !== req.user.id && req.user.role !== "admin") {
     return next(
       new ErrorResponse(
         `User ${req.params.id} is not authorized to update this report ${report._id}`,
@@ -127,7 +95,7 @@ exports.deleteReport = asyncHandler(async (req, res, next) => {
   }
 
   // Make sure user is report owner
-  if (report.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (report.user.toString() !== req.user.id && req.user.role !== "admin") {
     return next(
       new ErrorResponse(
         `User ${req.params.id} is not authorized to delete this report ${report._id}`,

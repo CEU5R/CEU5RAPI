@@ -1,7 +1,7 @@
-const path = require('path');
-const ErrorResponse = require('../utils/errorResponse');
-const asyncHandler = require('../middleware/async');
-const Recommend = require('../models/Recommend');
+const path = require("path");
+const ErrorResponse = require("../utils/errorResponse");
+const asyncHandler = require("../middleware/async");
+const Recommend = require("../models/Recommend");
 
 // @desc    Get all recommends
 // @route   GET /api/v1/recommend
@@ -35,56 +35,24 @@ exports.createRecommend = asyncHandler(async (req, res, next) => {
   // Add user to req.body
   req.body.user = req.user.id;
 
-  // If the user has a uploaded photo.
-  if (req.files) {
-    const photo = req.files.photo;
+  const file = req.file;
 
-    // Create custom filename
-    photo.name = `photo_${Date.now()}${path.parse(photo.name).ext}`;
+  if (file) {
+    // Add url to req.body
+    const photoUrl = req.file.location;
 
-    // Make sure the image is a photo
-    if (!photo.mimetype.startsWith('image')) {
-      return next(new ErrorResponse(`Please upload an image file`, 400));
-    }
-
-    // Check filesize
-    if (photo.size > process.env.MAX_FILE_UPLOAD) {
-      return next(
-        new ErrorResponse(
-          `Please upload an image less than ${process.env.MAX_FILE_UPLOAD}`,
-          400
-        )
-      );
-    }
-
-    photo.mv(
-      `${process.env.FILE_UPLOAD_PATH_RECOMMEND}/${photo.name}`,
-      async (err) => {
-        if (err) {
-          console.log(err);
-          return next(new ErrorResponse(`Problem with file upload`, 500));
-        }
-      }
-    );
-
-    const photoName = { photo: photo.name };
+    const photoName = { photo: photoUrl };
     const addedPhotoName = { ...req.body, ...photoName };
-    const recommend = await Recommend.create(addedPhotoName);
-
-    res.status(200).json({
-      success: true,
-      data: recommend,
-    });
+    const Recommend = await Repair.create(addedPhotoName);
   }
 
-  if (!req.files) {
-    const recommend = await Recommend.create(req.body);
-
-    res.status(200).json({
-      success: true,
-      data: recommend,
-    });
+  if (!file) {
+    const Recommend = await Repair.create(req.body);
   }
+
+  res.status(200).json({
+    success: true,
+  });
 });
 
 // @desc    Update new recommend
@@ -103,7 +71,7 @@ exports.updateRecommend = asyncHandler(async (req, res, next) => {
   }
 
   // Make sure user is recommend owner
-  if (recommend.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (recommend.user.toString() !== req.user.id && req.user.role !== "admin") {
     return next(
       new ErrorResponse(
         `User ${req.params.id} is not authorized to update this recommend ${recommend._id}`,
@@ -136,7 +104,7 @@ exports.deleteRecommend = asyncHandler(async (req, res, next) => {
   }
 
   // Make sure user is recommend owner
-  if (recommend.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (recommend.user.toString() !== req.user.id && req.user.role !== "admin") {
     return next(
       new ErrorResponse(
         `User ${req.params.id} is not authorized to delete this recommend ${recommend._id}`,

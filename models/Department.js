@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const moment = require("moment");
+let now = moment();
 
 const DepartmentSchema = new mongoose.Schema({
   department: {
@@ -9,8 +11,8 @@ const DepartmentSchema = new mongoose.Schema({
     unique: true,
   },
   createdAt: {
-    type: Date,
-    default: Date.now,
+    type: String,
+    default: now.format("MMMM Do YYYY, h:mm:ss a"),
   },
   status: {
     type: Number,
