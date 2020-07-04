@@ -37,21 +37,22 @@ exports.createRecognize = asyncHandler(async (req, res, next) => {
 
   const file = req.file;
 
+  let recognize;
+
   if (file) {
     // Add url to req.body
     const photoUrl = req.file.location;
 
     const photoName = { photo: photoUrl };
     const addedPhotoName = { ...req.body, ...photoName };
-    const Recognize = await Repair.create(addedPhotoName);
-  }
-
-  if (!file) {
-    const Recognize = await Repair.create(req.body);
+    recognize = await Repair.create(addedPhotoName);
+  } else {
+    recognize = await Repair.create(req.body);
   }
 
   res.status(200).json({
     success: true,
+    data: recognize,
   });
 });
 
