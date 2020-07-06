@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const moment = require("moment");
-let now = moment();
 
 const BuildingSchema = new mongoose.Schema({
   building: {
@@ -11,8 +9,8 @@ const BuildingSchema = new mongoose.Schema({
     unique: true,
   },
   createdAt: {
-    type: String,
-    default: now.format("MMMM Do YYYY, h:mm:ss a"),
+    type: Date,
+    default: Date.now,
   },
   status: {
     type: Number,

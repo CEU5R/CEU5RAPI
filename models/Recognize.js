@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const moment = require("moment");
-let now = moment();
 
 const RecognizeSchema = new mongoose.Schema({
   subject: {
@@ -16,8 +14,8 @@ const RecognizeSchema = new mongoose.Schema({
     maxlength: [500, "Description cannot be more than 500 characters"],
   },
   createdAt: {
-    type: String,
-    default: now.format("MMMM Do YYYY, h:mm:ss a"),
+    type: Date,
+    default: Date.now,
   },
   photo: {
     type: String,

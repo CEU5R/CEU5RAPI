@@ -2,8 +2,6 @@ const crypto = require("crypto");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const moment = require("moment");
-let now = moment();
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -33,8 +31,8 @@ const UserSchema = new mongoose.Schema({
   resetPasswordToken: String,
   resetPasswordExpire: Date,
   createdAt: {
-    type: String,
-    default: now.format("MMMM Do YYYY, h:mm:ss a"),
+    type: Date,
+    default: Date.now,
   },
   status: {
     type: Number,

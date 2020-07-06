@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const moment = require("moment");
-let now = moment();
 
 const ReportSchema = new mongoose.Schema({
   subject: {
@@ -20,8 +18,8 @@ const ReportSchema = new mongoose.Schema({
     maxlength: [1000, "Solution cannot be more than 1000 characters"],
   },
   createdAt: {
-    type: String,
-    default: now.format("MMMM Do YYYY, h:mm:ss a"),
+    type: Date,
+    default: Date.now,
   },
   category: {
     type: String,
