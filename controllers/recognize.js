@@ -45,9 +45,9 @@ exports.createRecognize = asyncHandler(async (req, res, next) => {
 
     const photoName = { photo: photoUrl };
     const addedPhotoName = { ...req.body, ...photoName };
-    recognize = await Repair.create(addedPhotoName);
+    recognize = await Recognize.create(addedPhotoName);
   } else {
-    recognize = await Repair.create(req.body);
+    recognize = await Recognize.create(req.body);
   }
 
   res.status(200).json({
